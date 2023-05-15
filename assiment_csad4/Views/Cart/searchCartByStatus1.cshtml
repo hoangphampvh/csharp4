@@ -1,0 +1,125 @@
+﻿@model IEnumerable<assiment_csad4.Models.CartDetail>
+
+@{
+    decimal sumMoney = 0;
+}
+
+<h2>GIỎ HÀNG</h2>
+<a type="submit" asp-controller="Cart" asp-action="searchCartByStatus1" class="btn btn-primary">Da Mua</a>
+<a type="submit" asp-controller="Cart" asp-action="searchCartByStatus0" class="btn btn-primary">Chua Mua</a>
+<a type="submit" asp-controller="Cart" asp-action="searchCartByStatus2" class="btn btn-primary">Dang Cho Xac Nhan</a>
+
+@if (Model != null && Model.Count() > 0)
+{
+    int stt = 1;
+
+        <table class="table">
+            <tr>
+                <th>STT</th>
+                <th>Ten San Pham</th>
+                <th>Gia</th>
+                <th>Nhap So Luong </th>
+                <th>Thành Tiền</th>
+                <th>Trang Thai</th>
+
+            </tr>
+        @foreach (var cartitem in Model)
+        {
+                    <tr>
+                        <td>@(stt++)</td>
+                @if (cartitem.ProductNavigation != null)
+                {
+                                <td>@cartitem.ProductNavigation.Name</td>
+                                <td>@cartitem.ProductNavigation.Price</td>
+
+                    @if (cartitem.Status == 0)
+                    {
+                        @using (Html.BeginForm("Update", "Cart", new { cartitem.Id, cartitem.Quantilty, cartitem.Status, cartitem.IdProduct, cartitem.IdUser }))
+                        {
+                                                <input type="hidden" value="@cartitem.IdProduct" name="IdProduct" />
+                                                <input type="hidden" value="@cartitem.IdUser" name="IdUser" />
+                                                <td><input asp-for="@cartitem.Quantilty" name="Quantilty" /></td>
+                                                <td>@(cartitem.Quantilty * cartitem.ProductNavigation.Price)</td>
+                                                <td>
+
+                                                        <p>Chua Mua</p>
+                                                  </td>
+
+                                                <td>
+                                                    <input type="submit" value="Cập Nhật" class="btn btn-success" />
+                                                </td>
+
+                        }
+                        @using (Html.BeginForm("DeleteConfirmed", "Cart", new { cartitem.Id }))
+                        {
+
+
+                                                                                                            <td>
+                                                                                                                <input type="submit" value="Xoa" class="btn btn-danger" />
+                                                                                                            </td>
+
+                        }
+                    }
+
+                    else if (cartitem.Status == 1)
+                    {
+                        @using (Html.BeginForm("Update", "Cart", new { cartitem.Id, cartitem.Quantilty, cartitem.Status, cartitem.IdProduct, cartitem.IdUser }))
+                        {
+                                                <input type="hidden" value="@cartitem.IdProduct" name="IdProduct" />
+                                                <input type="hidden" value="@cartitem.IdUser" name="IdUser" />
+                                                <td><input asp-for="@cartitem.Quantilty" name="Quantilty" /></td>
+                                                <td>@(cartitem.Quantilty * cartitem.ProductNavigation.Price)</td>
+                                                <td>
+                                                        <p>Da Mua</p>
+
+                                                </td>
+                                                <td>
+                                                    <input type="submit" value="Mua Lại" class="btn btn-secondary" />
+                                                </td>
+
+                        }
+                        @using (Html.BeginForm("DeleteConfirmed", "Cart", new { cartitem.Id }))
+                        {
+
+
+                                                                <td>
+                                                                    <input type="submit" value="Xoa" class="btn btn-danger" />
+                                                                </td>
+
+                        }
+                    }
+                    else
+                    {
+                                                                <input type="hidden" value="@cartitem.IdProduct" name="IdProduct" />
+                                                                <input type="hidden" value="@cartitem.IdUser" name="IdUser" />
+                                                                <td>@cartitem.Quantilty</td>
+                                                                <td>@(cartitem.Quantilty * cartitem.ProductNavigation.Price)</td>
+                                                                <td>                              
+                                                                            <p>Cho Xac Nhan Mua</p>
+                                                                </td>
+
+                    }
+
+
+                }
+
+                    </tr>
+        }
+        </table>
+
+    @foreach (var item in Model)
+    {
+
+        if (item.ProductNavigation != null)
+        {
+            sumMoney = sumMoney + (item.Quantilty * item.ProductNavigation.Price);
+        }
+    }
+        <p>Tong Tien: @sumMoney</p>
+}
+else
+{
+        <p class="alert alert-danger">Giỏ hàng trống</p>
+}
+
+                     <a asp-controller="Product" asp-action="Index">Back to List</a>

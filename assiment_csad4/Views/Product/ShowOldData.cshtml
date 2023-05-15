@@ -1,0 +1,84 @@
+﻿@model IEnumerable<assiment_csad4.Models.Product>
+@{
+	var list = ViewData["product"];
+}
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<div class="container">
+	<h2>Old Data(1min)</h2>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Price</th>
+					<th>AvailableQuantity</th>
+					<th>Status</th>
+					<th>Supplier</th>
+					<th>Description</th>
+                <th>Funtion</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+					<td>@item.Name</td>
+					<td>@item.Price</td>
+						<td>@item.AvailableQuantity</td>
+						<td>@item.Status</td>
+							<td>@item.Supplier</td>
+							<td>@item.Description</td>
+
+					<td>
+							<form asp-controller="Product" asp-action="RollBack" asp-route-id = "@item.Id">
+								<button class="btn">RollBack</button>
+						</form>
+						
+						</td>
+				</tr>
+				}				
+			</tbody>
+		</table>
+	<h2>New Data</h2>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Price</th>
+					<th>AvailableQuantity</th>
+					<th>Status</th>
+					<th>Supplier</th>
+					<th>Description</th>
+				</tr>
+				@if (ViewData["product"]!=null){
+					@foreach (var item in (List<Product>)ViewData["product"])
+					{
+										<tr>
+										<td>@item.Name</td>
+										<td>@item.Price</td>
+											<td>@item.AvailableQuantity</td>
+											<td>@item.Status</td>
+												<td>@item.Supplier</td>
+												<td>@item.Description</td>
+
+
+									</tr>
+					}
+				}else{
+					<h1>null</h1>
+				}
+				
+				
+				
+				
+			</thead>
+			<tbody>
+
+			</tbody>
+
+</body>

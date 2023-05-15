@@ -1,0 +1,133 @@
+@model IEnumerable<assiment_csad4.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+    List<string> imageExtensions = new List<string>()
+    {
+        ".jpg", ".png", ".webp", ".gif", ".pdf", ".tiff", ".jpeg"
+    };
+
+}
+
+<h1>Index</h1>
+
+<form asp-action="search" method="get">
+    <input  name="name" type="text"></input>
+    <input type="submit" value="Search"></input>
+</form>
+
+<p>
+    @if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+    {
+                <a asp-action="Create">Create New</a>
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AvailableQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Supplier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.UrlImage)
+            </th>
+            <th>
+           AddToCart
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+                        <tr>
+                            <td>
+                           <a asp-action="Details" style="text-decoration: none" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a> 
+                            </td>
+                            <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                    @Html.DisplayFor(modelItem => item.AvailableQuantity)
+                            </td>
+                            <td>
+                    @if (item.Status == 1)
+                    {
+                                                   <p>Con Hang</p>
+                    }
+                    else
+                    {
+                                                   <p>Het Hang</p>
+                    }    
+                            </td>
+                            <td>
+                    @Html.DisplayFor(modelItem => item.Supplier)
+                            </td>
+                            <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                         <td>
+                    @{
+                        var extension = System.IO.Path.GetExtension(item.UrlImage);
+                    }
+                    @if (extension != null && imageExtensions.Contains(extension))
+                    {
+                                        <img src="~/images/@item.UrlImage" height="100px">
+                    }
+                    else
+                    {
+                                        <img src="~/images/default.png" height="100px">
+                    }
+
+                        </td>
+                            <td>
+                    @if (User.Identity != null && !User.Identity.IsAuthenticated)
+                    {
+                                                 <form asp-controller="Cart" asp-action="addToCartWithSession" asp-route-id="@item?.Id" method="post">
+                                                                                                 <input type="submit" value="AddToCart" class="btn btn-primary" />
+                                                                            </form>
+
+                    }
+                    else if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+                    {
+                                                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+
+                                        <span>|</span>
+                                                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                                                <span>|</span>
+                                                                    <form asp-controller="Cart" asp-action="addToCart" asp-route-id="@item?.Id" method="post">
+                                                                                         <input type="submit" value="AddToCart" class="btn btn-primary" />
+                                                                    </form>
+                    }
+                    else
+                    {
+                        @using (Html.BeginForm("addToCart", "Cart", new { item.Id }))
+                        {
+                                                    <input type="hidden" value="@item.Id" name="id" />           
+                                                    <input type="submit" value="AddToCart" class="btn btn-primary" />                                            
+                        }
+                    }
+
+                            </td>
+                        </tr>
+        }
+
+    </tbody>
+</table>
+
+<partial name="_Paging" model="@ViewBag.pagingModel"/>

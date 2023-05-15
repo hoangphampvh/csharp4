@@ -1,0 +1,45 @@
+﻿@model IEnumerable<assiment_csad4.Models.BillDetail>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <b>User</b>
+            </th>
+            <th>
+                <b>Product</b>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+               @Html.DisplayFor(modelItem => item.Bill.UserNavigation.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

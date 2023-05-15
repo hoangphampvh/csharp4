@@ -1,0 +1,16 @@
+﻿<ul class="navbar-nav list-unstyled">
+    @*  (SignInManager.IsSignedIn(User): xác thực thông tin của 1 user đã được xác thực*@
+
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+                         
+             <li><a class="nav-link">Xin Chao @User.Identity.Name</a></li>
+         <li><a class="nav-link " asp-area="" asp-controller="Account" asp-action="LogOut">Logout</a></li>
+
+    }
+    else
+    {                 
+                             <li><a class="nav-link" asp-area="" asp-controller="Account" asp-action="CreateLogin">Sign Up</a></li>
+                         <li><a class="nav-link " asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
+    }
+       </ul>

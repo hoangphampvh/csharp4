@@ -1,0 +1,70 @@
+﻿@model IEnumerable<assiment_csad4.Models.Bill>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>ListBill</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+             <th>
+               <b>Ma HD</b>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateDate)
+            </th>
+            <th>
+                <b>User</b>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaHd)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.FirstOrDefault(p=>p.UserId == item.UserId).UserNavigation.Name)  
+            </td>
+            <td>
+               @if(item.Status ==2){
+                   <p>Don hang dang cho xac nhan</p>
+               }else{
+                   <p>Don Hang Xac Nhan Thanh Cong</p>
+               }
+            </td>
+            <td>  
+                 <a asp-action="Details" asp-route-Id = "@item.Id">Details</a>
+                 @if (User.IsInRole("Admin"))
+                    {
+                        @using (Html.BeginForm("Delete", "Bill", new { item.Id }))
+                        {
+                                                                <input type="hidden" value="@item.Id" name="id" />
+                                                                <input type="submit" value="Delete" class="btn btn-danger" />
+                        }
+                    }
+                   
+                @if(item.Status ==2){
+                        using(Html.BeginForm("Confirm", "Bill",new {item.Id}))
+                        {
+                                                <input type="hidden" value="@item.Id" name="id" />
+                                                <input type="submit" value="confirm" class="btn btn-primary" />
+                        }
+                }
+                
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\assiment_csad4.props" />
+</Project>

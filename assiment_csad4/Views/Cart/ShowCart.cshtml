@@ -1,0 +1,78 @@
+﻿@model IEnumerable<assiment_csad4.ViewModel.CartSession>
+
+@{
+    decimal sumMoney = 0;
+}
+
+<h2>GIỎ HÀNG</h2>
+
+
+@if (Model != null && Model.Count() > 0)
+{
+    int stt = 1;
+
+        <table class="table">
+            <tr>
+                <th>STT</th>
+                <th>Ten San Pham</th>
+                <th>Gia</th>
+                <th>Nhap So Luong </th>
+                <th>Thành Tiền</th>
+                <th>Trang Thai</th>
+            </tr>
+        @foreach (var cartitem in Model)
+        {
+                    <tr>
+                        <td>@(stt++)</td>
+              <td>@cartitem.Product.Name</td>
+               <td>@cartitem.Product.Price</td>
+
+                @using (Html.BeginForm("UpdateCart", "Cart",new{cartitem.Product.Id}))
+                        {
+                                              
+                                                <td><input asp-for="@cartitem.count" name="count" /></td>
+                                                <td>@(cartitem.count * cartitem.Product.Price)</td>
+                                                <td>
+
+                                                        <p>Chua Mua</p>
+                                                  </td>
+
+                                                <td>
+                                                    <input type="submit" value="Cập Nhật" class="btn btn-success" />
+                                                </td>
+
+                        }
+                    @using (Html.BeginForm("DeleteCart", "Cart", new { cartitem.Id }))
+                        {
+                             <td>
+                              <input type="submit" value="Xoa" class="btn btn-danger" />
+                                       </td>
+
+                        }                                                    
+                
+
+                    </tr>
+        }
+        </table>
+
+    @foreach (var item in Model)
+    {
+
+        if (item != null)
+        {
+            sumMoney = sumMoney + (item.count * item.Product.Price);
+        }
+    }
+        <p>Tong Tien: @sumMoney</p>
+
+    @using (Html.BeginForm("ThanhToan", "Cart", FormMethod.Post))
+    {
+        <button type="submit" class="btn btn-warning">Thanh toán</button>
+    }
+
+}
+else
+{
+        <p class="alert alert-danger">Giỏ hàng trống</p>
+}
+<a asp-controller="Product" asp-action="Index">Back to List</a>

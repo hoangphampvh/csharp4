@@ -1,0 +1,55 @@
+﻿@model IEnumerable<assiment_csad4.Models.Product>
+@using assiment_csad4.Configruration;
+@using Microsoft.EntityFrameworkCore;
+
+@{
+    ViewBag.Title = "Bán hàng trực tuyến";
+    List<string> imageExtensions = new List<string>()
+    {
+        ".jpg", ".png", ".webp", ".gif", ".pdf", ".tiff", ".jpeg"
+    };
+}
+
+<section class="intro-section">
+    <div class="container">
+        <h1>Chào mừng đến với trang Bán hàng trực tuyến của chúng tôi</h1>
+        <p>Chúng tôi cung cấp nhiều sản phẩm chất lượng cao với giá cả hợp lý. Hãy khám phá danh sách sản phẩm của chúng tôi và tìm kiếm sản phẩm phù hợp nhất cho bạn.</p>
+    </div>
+</section>
+
+<!-- Bài đăng -->
+<section class="posts-section">
+    <div class="container">
+        <h2>Bài đăng mới nhất</h2>
+        <div class="row">
+            @if (Model!=null && Model.Count() >0)
+            {
+                @foreach (var item in Model)
+                {
+                            <div class="col-md-4">
+                                    <div class="post-card">
+                            @{
+                                var extension = System.IO.Path.GetExtension(item.UrlImage);
+                            }
+                            @if (extension != null && imageExtensions.Contains(extension))
+                            {
+                                            <img src="~/images/@item.UrlImage" height="150px" width="350px">
+                            }
+                            else
+                            {
+                                            <img src="~/images/default.png" height="150px" width="350px">
+                            }
+                                        <h3 class="post-title">@item.Name</h3>
+                                        <p class="post-excerpt">@item.Description</p>
+                                                        <a asp-controller="Product" asp-action="Details"asp-route-id="@item.Id" class="btn btn-primary m-1">Xem chi tiết</a>
+                                    </div>
+                                </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+
+
+

@@ -1,0 +1,83 @@
+﻿@model assiment_csad4.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+@inject assiment_csad4.Service.CartDetailService cartDetail
+<h1>Details</h1>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AvailableQuantity)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AvailableQuantity)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Supplier)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Supplier)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UrlImage)
+        </dt>
+      <dd class = "col-sm-10">
+            @{
+                List<string> imageExtensions = new List<string>()
+    {
+        ".jpg", ".png", ".webp", ".gif", ".pdf", ".tiff", ".jpeg"
+    };
+                var extension = System.IO.Path.GetExtension(Model.UrlImage);
+            }
+            @if (extension != null && imageExtensions.Contains(extension))
+            {
+                                            <img src="~/images/@Model.UrlImage" height="100px">
+            }
+            else
+            {
+                                            <img src="~/images/default.png" height="100px">
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+   <form asp-controller="Product" asp-action="Details" asp-route-id="@Model?.Id" method="post">
+    <dd class="col-sm">
+        <label><b>Nhập số lượng</b></label><br>
+        <input name="count" type="number" placeholder="Nhập Số Lượng " />
+        </dd>
+      <input type="submit" value="AddToCart" class="btn btn-primary" />
+                @Html.Raw(ViewBag.mess)
+    </form>
+         
+   
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,52 @@
+﻿@model assiment_csad4.ViewModel.LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<hr/>
+<p>@ViewBag.id</p>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                    <span class="text-danger">
+                    @ViewBag.Message
+                    </span>
+            }
+            @Html.HiddenFor(x => x.ReturnUrl)
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                @if (!string.IsNullOrEmpty(ViewBag.mess))
+                {
+                        <span class="text-danger">
+                            @ViewBag.mess
+                        </span>
+                }
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="RememberLogin" /> @Html.DisplayNameFor(model => model.RememberLogin)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+               <button type="submit" class="btn btn-dark">Login</button>
+            
+            </div>
+
+        </form>
+    </div>
+</div>
